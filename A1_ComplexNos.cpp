@@ -21,7 +21,7 @@ public:
     void display(); 
      
     // Operator overloading 
-    complex operator* (complex &b); 
+    complex operator* (complex &c); 
     complex operator+ (complex &d); 
  
     // Friend functions 
@@ -49,18 +49,18 @@ void operator>>(istream &input, complex &q) {
 } 
  
 // Operator overloading definitions 
-complex complex::operator*(complex &b) { 
-    complex c7; 
-    c7.real = real * b.real; 
-    c7.imag = imag * b.imag; 
-    return c7; 
+complex complex::operator*(complex &c) { 
+    complex t; 
+    t.real =  real * c.real - imag * c.imag;
+    t.imag =  real * c.imag + imag * c.real;
+    return t; 
 } 
  
 complex complex::operator+(complex &d) { 
-    complex c8; 
-    c8.real = real + d.real; 
-    c8.imag = imag + d.imag; 
-    return c8; 
+    complex temp; 
+    temp.real = real + d.real; 
+    temp.imag = imag + d.imag; 
+    return temp; 
 } 
  
 int main() { 
