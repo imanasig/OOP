@@ -1,137 +1,114 @@
 /*Write C++ program using STL for sorting and searching user defined records such as personal records (Name, DOB, Telephone number etc.) using vectorcontainer.*/
 
 #include <iostream>
-#include <algorithm>
 #include <vector>
+#include <algorithm> // For sort and find_if
 #include <string>
-#include <cstring>
 
 using namespace std;
 
-class Person {
+// PersonalRecord class to store personal details
+class PersonalRecord {
 public:
-    string fullName;
-    int phoneNumber;
-    string dob;
+    string name;
+    string dob;        // Date of Birth
+    string phoneNumber;
 
-    bool operator==(const Person& other) const {
-        return phoneNumber == other.phoneNumber;
+    // Constructor
+    PersonalRecord(string name, string dob, string phoneNumber)
+        : name(name), dob(dob), phoneNumber(phoneNumber) {}
+
+    // Display method
+    void display() const {
+        cout << "Name: " << name << ", DOB: " << dob << ", Phone: " << phoneNumber << endl;
     }
-    bool operator<(const Person& other) const {
-        return phoneNumber < other.phoneNumber;
+
+    // Operator overload to compare two records for sorting
+    bool operator<(const PersonalRecord& other) const {
+        return name < other.name; // Sort by name
     }
 };
 
-vector<Person> records;
+// Function to display all records
+void displayRecords(const vector<PersonalRecord>& records) {
+    if (records.empty()) {
+        cout << "No records to display.\n";
+        return;
+    }
+    cout << "\n--- Personal Records ---\n";
+    for (auto it = records.begin(); it != records.end(); ++it) {
+        it->display();
+    }
+    cout << "-------------------------\n";
+}
 
-void displayRecord(const Person& record);
-void displayAllRecords();
-void addRecord();
-void searchRecord();
-void deleteRecord();
-bool compareByDob(const Person& p1, const Person& p2);
+// Simplified function to search for a record by name
+void searchRecord(const vector<PersonalRecord>& records, const string& searchName) {
+    auto it = find_if(records.begin(), records.end(), [&](const PersonalRecord& record) {
+        return record.name == searchName;
+    });
+
+    if (it != records.end()) {
+        it->display();
+    } else {
+        cout << "Record not found.\n";
+    }
+}
 
 int main() {
+    vector<PersonalRecord> records; // Vector to store personal records
     int choice;
+    string name, dob, phoneNumber;
+
     do {
-        cout << "\n* * * * * Menu * * * * *";
-        cout << "\n1. Add Record";
-        cout << "\n2. Display All Records";
-        cout << "\n3. Search Record";
-        cout << "\n4. Sort Records by DOB";
-        cout << "\n5. Delete Record";
-        cout << "\n6. Exit";
-        cout << "\nEnter your choice: ";
+        cout << "\n--- Personal Record Management ---\n";
+        cout << "1. Add Record\n";
+        cout << "2. Display Records\n";
+        cout << "3. Sort Records by Name\n";
+        cout << "4. Search Record by Name\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
         cin >> choice;
+        cin.ignore(); // Clear input buffer
 
         switch (choice) {
         case 1:
-            addRecord();
+            cout << "Enter Name: ";
+            getline(cin, name);
+            cout << "Enter Date of Birth (DD-MM-YYYY): ";
+            getline(cin, dob);
+            cout << "Enter Phone Number: ";
+            getline(cin, phoneNumber);
+            records.emplace_back(name, dob, phoneNumber); // Add record to vector
+            cout << "Record added successfully.\n";
             break;
+
         case 2:
-            displayAllRecords();
+            displayRecords(records); // Display all records
             break;
+
         case 3:
-            searchRecord();
+            sort(records.begin(), records.end()); // Sort using operator
+            cout << "Records sorted by name.\n";
             break;
+
         case 4:
-            sort(records.begin(), records.end(), compareByDob);
-            cout << "\nSorted by Date of Birth:\n";
-            displayAllRecords();
+            cout << "Enter name to search: ";
+            getline(cin, name);
+            searchRecord(records, name); // Search for a record
             break;
+
         case 5:
-            deleteRecord();
+            cout << "Exiting program. Goodbye!\n";
             break;
-        case 6:
-            cout << "\nExiting program. Goodbye!\n";
-            return 0;
+
         default:
-            cout << "\nInvalid choice! Please try again.";
+            cout << "Invalid choice. Please try again.\n";
         }
-    } while (true);
+    } while (choice != 5);
+
     return 0;
 }
 
-void addRecord() {
-    Person newRecord;
-    cin.ignore(); // Clear input buffer
-    cout << "\nEnter Full Name: ";
-    getline(cin, newRecord.fullName);
-    cout << "Enter Phone Number: ";
-    cin >> newRecord.phoneNumber;
-    cout << "Enter Date of Birth (DD/MM/YYYY): ";
-    cin >> newRecord.dob;
-    records.push_back(newRecord);
-}
 
-void displayAllRecords() {
-    if (records.empty()) {
-        cout << "\nNo records available.\n";
-        return;
-    }
-    for_each(records.begin(), records.end(), displayRecord);
-}
-
-void displayRecord(const Person& record) {
-    cout << "\nName: " << record.fullName;
-    cout << "\nPhone Number: " << record.phoneNumber;
-    cout << "\nDate of Birth: " << record.dob << "\n";
-}
-
-void searchRecord() {
-    int searchPhone;
-    cout << "\nEnter Phone Number to search: ";
-    cin >> searchPhone;
-
-    auto it = find_if(records.begin(), records.end(), [&](const Person& p) {
-        return p.phoneNumber == searchPhone;
-    });
-
-    if (it != records.end()) {
-        cout << "\nRecord Found:\n";
-        displayRecord(*it);
-    } else {
-        cout << "\nRecord Not Found!";
-    }
-}
-
-void deleteRecord() {
-    int deletePhone;
-    cout << "\nEnter Phone Number to delete: ";
-    cin >> deletePhone;
-
-    auto it = find_if(records.begin(), records.end(), [&](const Person& p) {
-        return p.phoneNumber == deletePhone;
-    });
-
-    if (it != records.end()) {
-        records.erase(it);
-        cout << "\nRecord Deleted!";
-    } else {
-        cout << "\nRecord Not Found!";
-    }
-}
-
-bool compareByDob(const Person& p1, const Person& p2) {
-    return p1.dob < p2.dob;
-}
+    
