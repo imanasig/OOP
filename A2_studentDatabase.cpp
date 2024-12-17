@@ -1,5 +1,7 @@
-/*Develop a program in C++ to create a database of student’s information system containingthe following information: Name, roll number, Class, Division, Date of Birth, Blood group, contact address, Telephone number, Driving license no. and other. 
-Construct the database with suitable member functions. Make use of constructor, default constructor, copy constructor, destructor, static member functions, friend class, this pointer, inline code and dynamic memory allocation operators-
+/*Develop a program in C++ to create a database of student’s information system containingthe following information: Name,
+roll number, Class, Division, Date of Birth, Blood group, contact address, Telephone number, Driving license no. and
+other. Construct the database with suitable member functions. Make use of constructor, default constructor, copy constructor,
+destructor, static member functions, friend class, this pointer, inline code and dynamic memory allocation operators-
 new and delete as well as exception*/
 
 #include <iostream>
